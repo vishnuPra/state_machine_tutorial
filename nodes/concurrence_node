@@ -1,0 +1,73 @@
+#!/usr/bin/env python
+
+import smach
+import rospy
+import smach_ros
+
+import state_machine_tutorial
+from smach_tutorial.Concurrence import *
+##-----------------------------------------------------------------------------------
+class EmptyState(smach.State):
+    def __init__(self):
+        smach.State.__init__(self, outcomes=["continue"], input_keys=[], output_keys=[], io_keys=[])
+    
+    def execute(self, ud):
+        rospy.sleep(2)
+        return "continue"
+    
+def SimpleSM():
+    Simple_sm = smach.StateMachine(outcomes=["exit"])
+    
+    with Simple_sm:
+        Simple_sm.add('Wait', EmptyState(), transitions={"continue": 'Concurrence'})
+        Simple_sm.add('Concurrence', SimpleConcurrence(), transitions={"positiv": 'exit',
+                                                                     "negativ": 'exit'})
+    
+    return Simple_sm
+
+def main():
+    
+    Simple_sm = SimpleSM()
+    
+    introspection_server = smach_ros.IntrospectionServer('SM', Simple_sm, '/SM_root')
+    introspection_server.start()
+    
+    outcome = Simple_sm.execute()
+    rospy.loginfo("Result : " + outcome)
+    introspection_server.stop()
+    
+def SimpleSM1():
+    Simple_sm = smach.StateMachine(outcomes=["exit"])
+    
+    with Simple_sm:
+        Simple_sm.add('Wait', EmptyState(), transitions={"continue": 'Concurrence'})
+        Simple_sm.add('Concurrence', SynchroConcurrence(), transitions={"succeeded": 'exit',
+                                                                     "aborted": 'exit'})
+    
+    return Simple_sm
+
+
+def main1():  
+    Simple_sm = SimpleSM1()
+    
+    introspection_server = smach_ros.IntrospectionServer('SM', Simple_sm, '/SM_root')
+    introspection_server.start()
+    
+    outcome = Simple_sm.execute()
+    rospy.loginfo("Result : " + outcome)
+    introspection_server.stop()
+    
+##-----------------------------------------------------------------------------------
+
+if __name__ == '__main__':
+    rospy.init_node('tutorial_node')
+    exercise = rospy.get_param('tutorial_node/exercise',0) 
+    if(exercise == 0):
+        main()
+    elif(exercise == 1):
+        main1()
+    else:
+        rospy.logerr("Exercise not listed")
+            
+
+        

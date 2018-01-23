@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scxml xmlns="http://www.w3.org/2005/07/scxml" version="1.0" binding="early" xmlns:qt="http://www.qt.io/2015/02/scxml-ext" qt:editorversion="4.5.0" initial="SetGoal">
+    <qt:editorinfo initialGeometry="326.94;83.71;-20;-20;40;40"/>
+    <datamodel>
+        <data id="skill_file" expr="${state_machine_tutorial}/resources/register.xml"/>
+        <data id="sleep_time" expr="1.0"/>
+    </datamodel>
+    <state id="Wait">
+        <qt:editorinfo scenegeometry="326.94;475.07;266.94;425.07;120;100" geometry="326.94;475.07;-60;-50;120;100"/>
+        <transition type="external" event="done" target="Final_2"/>
+        <datamodel>
+            <data id="skill" expr="Wait">
+                <qt:editorinfo geometry="-138.97;-161.30;0;0;0;0"/>
+            </data>
+        </datamodel>
+    </state>
+    <final id="Final_2">
+        <qt:editorinfo scenegeometry="326.94;605.35;306.94;585.35;40;40" geometry="326.94;605.35;-20;-20;40;40"/>
+    </final>
+    <final id="Final_4">
+        <qt:editorinfo scenegeometry="508.79;170.42;488.79;150.42;40;40" geometry="508.79;170.42;-20;-20;40;40"/>
+    </final>
+    <state id="SetGoal">
+        <qt:editorinfo scenegeometry="326.94;170.42;266.94;120.42;120;100" geometry="326.94;170.42;-60;-50;120;100"/>
+        <datamodel>
+            <data id="skill" expr="SetGoal"/>
+            <data id="goal" expr="[0.592, -0.553,0.0]"/>
+        </datamodel>
+        <transition type="external" event="invalid" target="Final_4"/>
+        <transition type="external" event="done" target="Moving">
+            <qt:editorinfo movePoint="16.13;2.48" endTargetFactors="61.03;71.45"/>
+        </transition>
+    </state>
+    <state id="Moving">
+        <qt:editorinfo scenegeometry="326.94;308.95;266.94;258.95;120;100" geometry="326.94;308.95;-60;-50;120;100"/>
+        <datamodel>
+            <data id="skill" expr="MoveBase_ac"/>
+        </datamodel>
+        <transition type="external" target="Wait" event="succeeded">
+            <qt:editorinfo movePoint="12.41;1.24"/>
+        </transition>
+        <transition type="external" event="aborted" target="Final_2">
+            <qt:editorinfo localGeometry="260.52;130.63"/>
+        </transition>
+    </state>
+</scxml>

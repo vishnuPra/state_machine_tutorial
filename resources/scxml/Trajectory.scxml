@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scxml xmlns="http://www.w3.org/2005/07/scxml" version="1.0" binding="early" xmlns:qt="http://www.qt.io/2015/02/scxml-ext" qt:editorversion="4.5.0" initial="Init_amcl">
+    <qt:editorinfo initialGeometry="150.40;-32.40;-20;-20;40;40"/>
+    <datamodel>
+        <data id="skill_file" expr="${state_machine_tutorial}/resources/register.xml"/>
+        <data id="sleep_time" expr="1.0"/>
+        <data id="goal_list" expr="[[0.592, -0.553,0.0],[1.862, 0.546,-3.14],[-1.605, 1.387,-1.57],&#10;[-1.786, -0.453,0.0]]"/>
+    </datamodel>
+    <state id="Move_SM">
+        <qt:editorinfo scenegeometry="183.95;276.48;234.52;249.36;371.22;664.24" geometry="183.95;276.48;50.57;-27.12;371.22;664.24"/>
+        <state id="Wait">
+            <qt:editorinfo scenegeometry="383.89;742.37;323.89;692.37;120;100" geometry="199.94;465.89;-60;-50;120;100"/>
+            <transition type="external" event="done" target="Final_2"/>
+            <datamodel>
+                <data id="skill" expr="Wait">
+                    <qt:editorinfo geometry="-138.97;-161.30;0;0;0;0"/>
+                </data>
+            </datamodel>
+        </state>
+        <initial>
+            <qt:editorinfo scenegeometry="383.89;351.01;363.89;331.01;40;40" geometry="199.94;74.53;-20;-20;40;40"/>
+            <transition target="SetGoal"/>
+        </initial>
+        <state id="Moving">
+            <qt:editorinfo scenegeometry="383.89;576.25;323.89;526.25;120;100" geometry="199.94;299.77;-60;-50;120;100"/>
+            <datamodel>
+                <data id="skill" expr="MoveBase_ac"/>
+            </datamodel>
+            <transition type="external" target="Wait" event="succeeded">
+                <qt:editorinfo movePoint="12.41;1.24"/>
+            </transition>
+            <transition type="external" event="aborted" target="Final_2">
+                <qt:editorinfo movePoint="-1.16;28.92" localGeometry="-139.79;111.07"/>
+            </transition>
+        </state>
+        <state id="SetGoal">
+            <qt:editorinfo scenegeometry="383.89;437.72;323.89;387.72;120;100" geometry="199.94;161.24;-60;-50;120;100"/>
+            <datamodel>
+                <data id="skill" expr="SetGoal"/>
+            </datamodel>
+            <transition type="external" event="invalid" target="Final_4"/>
+            <transition type="external" event="done" target="Moving">
+                <qt:editorinfo movePoint="16.13;2.48" endTargetFactors="61.03;71.45"/>
+            </transition>
+        </state>
+        <final id="Final_4">
+            <qt:editorinfo scenegeometry="565.74;437.72;545.74;417.72;40;40" geometry="381.79;161.24;-20;-20;40;40"/>
+        </final>
+        <final id="Final_2">
+            <qt:editorinfo scenegeometry="383.89;872.65;363.89;852.65;40;40" geometry="199.94;596.17;-20;-20;40;40"/>
+        </final>
+        <transition type="external" event="done" target="Next_goal">
+            <qt:editorinfo movePoint="15.04;1.16" startTargetFactors="72.27;1.91" endTargetFactors="76.48;53.32"/>
+        </transition>
+        <transition type="external" event="invalid" target="Final_5"/>
+        <transition type="external" event="aborted" target="Final_6">
+            <qt:editorinfo movePoint="6.94;10.41"/>
+        </transition>
+    </state>
+    <state id="Init_amcl">
+        <qt:editorinfo scenegeometry="395.67;-32.40;335.67;-82.40;120;100" geometry="395.67;-32.40;-60;-50;120;100"/>
+        <transition type="external" event="position_set" target="Next_goal"/>
+        <datamodel>
+            <data id="skill" expr="SetInitialPose"/>
+        </datamodel>
+    </state>
+    <state id="Next_goal">
+        <qt:editorinfo scenegeometry="273.17;120.57;279.17;70.57;233;114" geometry="273.17;120.57;6;-50;233;114"/>
+        <datamodel>
+            <data id="skill" expr="NextGoal"/>
+        </datamodel>
+        <transition type="external" event="next_point" target="Move_SM">
+            <qt:editorinfo endTargetFactors="16.49;10.95"/>
+        </transition>
+        <transition type="external" event="finished" target="Final_7"/>
+    </state>
+    <final id="Final_5">
+        <qt:editorinfo scenegeometry="742.74;581.48;722.74;561.48;40;40" geometry="742.74;581.48;-20;-20;40;40"/>
+    </final>
+    <final id="Final_6">
+        <qt:editorinfo scenegeometry="96.02;581.48;76.02;561.48;40;40" geometry="96.02;581.48;-20;-20;40;40"/>
+    </final>
+    <final id="Final_7">
+        <qt:editorinfo scenegeometry="637.46;127.57;617.46;107.57;40;40" geometry="637.46;127.57;-20;-20;40;40"/>
+    </final>
+</scxml>
