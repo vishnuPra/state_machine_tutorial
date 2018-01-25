@@ -11,32 +11,7 @@ from std_msgs.msg import String, Bool, Empty
 class WaitForMessage(smach.State):
     def __init__(self, timeout=10):
         smach.State.__init__(self, outcomes=["timeout", "message_received","preempted"], output_keys=["msg"])
-        self.sub = rospy.Subscriber("/message",String, self.message_received_cb)
-        self.msg_received = False
-        self.msg = None
-        self.timeout = timeout
-    
-    def message_received_cb(self, msg):
-        self.msg = msg.data
-        self.msg_received = True
-        
-    def execute(self, ud):
-        #set the value to false at the begin of execution because I want it to wait eveytime I call execute the state
-        self.msg_received = False
-        self.msg = None
-        ros_timeout_ = rospy.Time().now() + rospy.Duration(self.timeout)
-        while(self.msg_received == False):
-            if rospy.Time.now() > ros_timeout_:
-                rospy.logwarn("Timed Out")
-                return "timeout"
-            elif self.preempt_requested() or rospy.is_shutdown():
-                rospy.logwarn("Preempted ! (or shutdown)")
-                return "preempted"
-            else:
-                rospy.sleep(0.1)
-        rospy.loginfo("Message received : '%s'" %self.msg)
-        ud.msg = self.msg
-        return "message_received"
+        #HAVE FUN
     
 #---------------------------------------------------------------------------------------------------------------    
     
