@@ -70,17 +70,10 @@ class Bar(smach.State):
 
 ##-----------------------------------------------------------------------------------
 
-def FooBarStateMachine():
-    FooBar_sm = smach.StateMachine(outcomes=["exit"])
-    
-    with FooBar_sm:
-        FooBar_sm.add('Foo', Foo(), transitions={"continue": 'Bar',
-                                                 "out": "exit"})
-        FooBar_sm.add('Bar', Bar(), transitions={"continue" : 'Foo'})
+#def FooBarStateMachine():
+#    FooBar_sm =
         
-    return FooBar_sm
-    
-    return SetPrint_sm
+#    return FooBar_sm
 
 
 ##-----------------------------------------------------------------------------------    
@@ -95,13 +88,9 @@ class EmptyState(smach.State):
         rospy.sleep(2.0)
         return "continue" 
    
-def NestedStateMachine():
-    main_sm = smach.StateMachine(outcomes=["over"])
+#def NestedStateMachine():
+#    main_sm = 
     
-    with main_sm:
-        main_sm.add('Wait',EmptyState(),transitions={"continue":'SetPrintSM'})
-        main_sm.add('SetPrintSM',SetPrintStateMachine(),transitions={"exit":"over"})
-    
-    return main_sm
+#    return main_sm
 
 

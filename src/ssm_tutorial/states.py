@@ -50,7 +50,7 @@ class WaitState(ssm_state.ssmState):
         ssm_state.ssmState.__init__(self, outcomes=["continue"], io_keys=["sleep_time"])
         
     def execution(self, ud):
-        rospy.sleep(sleep_time)
+        rospy.sleep(ud.sleep_time)
         return "continue"
         
 class MessageReader(ssm_state.ssmState):
