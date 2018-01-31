@@ -1,5 +1,6 @@
 <?xml version="1.0"?>
 <skills>
+        <skill name="Wait" 					pkg="state_machine_tutorial" 	module="ssm_tutorial.states"  class="Wait"	/>
         <skill name="SetGoal" 				pkg="state_machine_tutorial" 	module="ssm_tutorial.states"  class="SetGoal"	/>
         <skill name="WaitSSM" 					pkg="state_machine_tutorial" 	module="ssm_tutorial.states"  class="Wait_ssm"	/>
         <skill name="MoveBase_ac" 			pkg="state_machine_tutorial" 	module="ssm_tutorial.states"  class="MoveBase_ac"	/>

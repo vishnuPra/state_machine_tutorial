@@ -12,16 +12,19 @@ from airbus_ssm_core import ssm_state
 from geometry_msgs.msg import PoseWithCovarianceStamped
 from move_base_msgs.msg import MoveBaseAction, MoveBaseGoal, MoveBaseResult
 
-##-------------------------------------------------------------------------------------------------------------------------      
-#class WaitState(ssm_state.ssmState):
+      
+class WaitState(ssm_state.ssmState):
+    def __init__(self):
+        ssm_state.ssmState.__init__(self, outcomes=["done"], io_keys=["sleep_time"])
+        
+    def execution(self, ud):
+        if(isinstance(ud.sleep_time,basestring)): ##converting into a float from a string only if it's a string
+            ud.sleep_time = ast.literal_eval(ud.sleep_time) #convert the string into a float
+            
+        rospy.sleep(ud.sleep_time)
+        return "continue"
 
-    
-# TIPS :
-#        if(isinstance(ud.sleep_time,basestring)): ##converting into a float from a string only if it's a string
-#            ud.sleep_time = ast.literal_eval(ud.sleep_time) ##convert the string into a float
 
-
-##-------------------------------------------------------------------------------------------------------------------------
 ##These are complexe examples, but can give you a glimpse of possibilties.
 
 class SetGoal(ssm_state.ssmState):

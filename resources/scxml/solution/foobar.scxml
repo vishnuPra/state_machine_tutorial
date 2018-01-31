@@ -5,9 +5,9 @@
         <data id="skill_file" expr="${state_machine_tutorial}/resources/register.xml"/>
     </datamodel>
     <state id="Foo">
-        <qt:editorinfo scenegeometry="331.82;165.85;271.82;115.85;120;100" geometry="331.82;165.85;-60;-50;120;100"/>
+        <qt:editorinfo geometry="331.82;165.85;-60;-50;120;100" scenegeometry="331.82;165.85;271.82;115.85;120;100"/>
         <transition type="external" target="Bar" event="continue">
-            <qt:editorinfo movePoint="-68.32;-0.99" localGeometry="-91.18;66.69"/>
+            <qt:editorinfo localGeometry="-91.18;66.69" movePoint="-68.32;-0.99"/>
         </transition>
         <datamodel>
             <data id="skill" expr="Foo"/>
@@ -17,15 +17,15 @@
         </transition>
     </state>
     <state id="Bar">
-        <qt:editorinfo scenegeometry="331.82;304.38;271.82;254.38;120;100" geometry="331.82;304.38;-60;-50;120;100"/>
+        <qt:editorinfo geometry="331.82;304.38;-60;-50;120;100" scenegeometry="331.82;304.38;271.82;254.38;120;100"/>
         <datamodel>
             <data id="skill" expr="Bar"/>
         </datamodel>
         <transition type="external" event="continue" target="Foo">
-            <qt:editorinfo movePoint="92.55;5.78" localGeometry="71.94;-70.68"/>
+            <qt:editorinfo localGeometry="71.94;-70.68" movePoint="92.55;5.78"/>
         </transition>
     </state>
     <final id="final">
-        <qt:editorinfo scenegeometry="622.20;165.85;602.20;145.85;40;40" geometry="622.20;165.85;-20;-20;40;40"/>
+        <qt:editorinfo geometry="622.20;165.85;-20;-20;40;40" scenegeometry="622.20;165.85;602.20;145.85;40;40"/>
     </final>
 </scxml>
