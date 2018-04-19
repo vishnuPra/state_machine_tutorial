@@ -93,4 +93,56 @@ class EmptyState(smach.State):
     
 #    return main_sm
 
+##--------------------------
+## main functions
+## DON'T DO ANY CHANGE BELOW !!!!
 
+def main():
+    
+    SimpleSM = SetPrintStateMachine()
+    
+    introspection_server = smach_ros.IntrospectionServer('SM', SimpleSM, '/SM_root')
+    introspection_server.start()
+    rospy.sleep(3.0)
+    outcome = SimpleSM.execute()
+    rospy.loginfo("Result : " + outcome)
+    introspection_server.stop()
+    
+    
+def main1():
+    
+    SimpleSM = FooBarStateMachine()
+    
+    introspection_server = smach_ros.IntrospectionServer('SM', SimpleSM, '/SM_root')
+    introspection_server.start()
+    rospy.sleep(3.0)
+    outcome = SimpleSM.execute()
+    rospy.loginfo("Result : " + outcome)
+    introspection_server.stop()
+    
+def main2():
+    
+    
+    SimpleSM = NestedStateMachine()
+    
+    introspection_server = smach_ros.IntrospectionServer('SM', SimpleSM, '/SM_root')
+    introspection_server.start()
+    rospy.sleep(3.0)
+    outcome = SimpleSM.execute()
+    rospy.loginfo("Result : " + outcome)
+    introspection_server.stop()
+    
+##-----------------------------------------------------------------------------------
+
+if __name__ == '__main__':
+    rospy.init_node('tutorial_node')
+    exercise = rospy.get_param('tutorial_node/exercise',0) 
+    if(exercise == 0):
+        main()
+    elif(exercise == 1):
+        main1()
+    elif(exercise == 2):
+        main2()
+    else:
+        rospy.logerr("Exercise not listed")
+    rospy.sleep(3.0)

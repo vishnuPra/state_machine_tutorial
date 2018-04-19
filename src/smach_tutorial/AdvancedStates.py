@@ -12,6 +12,21 @@ class WaitForMessage(smach.State):
     def __init__(self, timeout=10):
         smach.State.__init__(self, outcomes=["timeout", "message_received","preempted"], output_keys=["msg"])
         #HAVE FUN
+        #Tips: Look at the MoveBase_ac below
+        #Tips: self.sub = rospy.Subscriber("/message",String, self.message_received_cb)#initialise the subscriber
+    
+    def message_received_cb(self, msg):
+        pass
+
+
+##-----------------------------------------------------------------------------------
+class EmptyState(smach.State):
+    def __init__(self):
+        smach.State.__init__(self, outcomes=["continue"], input_keys=[], output_keys=[], io_keys=[])
+    
+    def execute(self, ud):
+        rospy.sleep(2.0)
+        return "continue"
     
 #---------------------------------------------------------------------------------------------------------------    
     
@@ -84,6 +99,38 @@ class MoveBase_ac(smach.State):
         return "succeeded"
     
 
+
+def WaitSM():
+    Wait_sm = smach.StateMachine(outcomes=["timeout","message_received","preempted"])
+    
+    
+    with Wait_sm:
+        Wait_sm.add('Wait', EmptyState(), transitions={"continue" : 'WaitMsg'})
+        Wait_sm.add('WaitMsg', WaitForMessage(), transitions={"timeout" : "timeout",
+                                                      "message_received" : "message_received",
+                                                      "preempted": "preempted"})
+                                                      
+    return Wait_sm
+
+def main():
+    
+    Wait_sm = WaitSM()
+    
+    introspection_server = smach_ros.IntrospectionServer('SM', Wait_sm, '/SM_root')
+    introspection_server.start()
+    
+    Wait_sm.execute()
+    
+    introspection_server.stop()
+    
+
+if __name__ == '__main__':
+    rospy.init_node('tutorial_node')
+    exercise = rospy.get_param('tutorial_node/exercise',0) 
+    if(exercise == 0):
+        main()
+    else:
+        rospy.logerr("Exercise not listed")
 
 
         

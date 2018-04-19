@@ -5,8 +5,21 @@ import smach
 import random
 import smach_ros
 
+##Wait state for stating
+
+class EmptyState(smach.State):
+    def __init__(self):
+        smach.State.__init__(self, outcomes=["continue"], input_keys=[], output_keys=[], io_keys=[])
+    
+    def execute(self, ud):
+        rospy.sleep(2)
+        return "continue"
+
+
+
 ##-----------------------------------------------------------------------------------
-##Example 2
+##Example 1
+##-----------------------------------------------------------------------------------
 
 class ConcurrenceState(smach.State):
     def __init__(self):
@@ -33,7 +46,7 @@ def SimpleConcurrence():
     return FooBar_cc
 
 ##-----------------------------------------------------------------------------------
-##Example 1
+##Example 2
 
 class Ping(smach.State):
     def __init__(self):
@@ -68,8 +81,60 @@ def SynchroConcurrence():
     return Synchro_cc
 
 
+
     
+def SimpleSM():
+    Simple_sm = smach.StateMachine(outcomes=["exit"])
     
+    with Simple_sm:
+        Simple_sm.add('Wait', EmptyState(), transitions={"continue": 'Concurrence'})
+        Simple_sm.add('Concurrence', SimpleConcurrence(), transitions={"positiv": 'exit',
+                                                                     "negativ": 'exit'})
+    
+    return Simple_sm
+
+def main():
+    
+    Simple_sm = SimpleSM()
+    
+    introspection_server = smach_ros.IntrospectionServer('SM', Simple_sm, '/SM_root')
+    introspection_server.start()
+    rospy.sleep(3.0)
+    outcome = Simple_sm.execute()
+    rospy.loginfo("Result : " + outcome)
+    introspection_server.stop()
+    
+def SimpleSM1():
+    Simple_sm = smach.StateMachine(outcomes=["exit"])
+    
+    with Simple_sm:
+        Simple_sm.add('Wait', EmptyState(), transitions={"continue": 'Concurrence'})
+        Simple_sm.add('Concurrence', SynchroConcurrence(), transitions={"succeeded": 'exit',
+                                                                     "aborted": 'exit'})
+    
+    return Simple_sm
+
+def main1():  
+    Simple_sm = SimpleSM1()
+    
+    introspection_server = smach_ros.IntrospectionServer('SM', Simple_sm, '/SM_root')
+    introspection_server.start()
+    rospy.sleep(3.0)
+    outcome = Simple_sm.execute()
+    rospy.loginfo("Result : " + outcome)
+    introspection_server.stop()
+    
+##-----------------------------------------------------------------------------------
+
+if __name__ == '__main__':
+    rospy.init_node('tutorial_node')
+    exercise = rospy.get_param('tutorial_node/exercise',0) 
+    if(exercise == 0):
+        main()
+    elif(exercise == 1):
+        main1()
+    else:
+        rospy.logerr("Exercise not listed")
     
 
     

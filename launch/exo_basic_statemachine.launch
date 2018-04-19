@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <launch>
   <arg name="exercise" default="0"/>
-  <node name="tutorial_node" pkg="state_machine_tutorial" type="basic_statemachine_node" respawn="false" output="screen">
+  <node name="tutorial_node" pkg="state_machine_tutorial" type="BasicStateMachine.py" respawn="false" output="screen">
   		<param name="exercise" value="$(arg exercise)"/>
   </node>
         

@@ -9,8 +9,7 @@ import smach_ros
 from geometry_msgs.msg import PoseWithCovarianceStamped
 from move_base_msgs.msg import MoveBaseAction, MoveBaseGoal, MoveBaseResult
 ##-----------------------------------------------------------------------------------
-##Exercice 1
-##define a state machine 
+##Example 1
         
 class SetGoal(smach.State):
     #this state write inside the userdata "msg", the message set as parameter.
@@ -147,28 +146,7 @@ def MovingSM():
         Moving_sm.add('Wait',  Wait(1.0), transitions={"done"      : "exit",
                                                       "preempted" : "exit"})
                                                       
-    return Moving_sm
-
-def MovingSMNested():
-    Moving_sm = smach.StateMachine(outcomes=["next","aborted"],input_keys=["goal"])
-    
-    
-    with Moving_sm:
-        Moving_sm.add('SetGoal', SetGoal(), transitions={"done" : 'MoveBase',
-                                                      "invalid" : "aborted"},
-                                          remapping={"goal_in"  : "goal",
-                                                     "goal_out" : "goal"})
-                                                     
-        Moving_sm.add('MoveBase', MoveBase_ac(), transitions={"succeeded"  : 'Wait',
-                                                             "aborted"   : "aborted",
-                                                             "preempted" : "aborted"},
-                                                  remapping={"goal"      :"goal"})
-        
-        Moving_sm.add('Wait',  Wait(2.0), transitions={"done"      : "next",
-                                                      "preempted" : "aborted"})
-                                                      
-    return Moving_sm
-    
+    return Moving_sm    
     
 ##-----------------------------------------------------------------------------------
 
@@ -216,6 +194,27 @@ class NextGoal(smach.State):
             rospy.loginfo("Going to next point : %s"%str(ud.next_goal))
             return "next_point"
         
+
+def MovingSMNested():
+    Moving_sm = smach.StateMachine(outcomes=["next","aborted"],input_keys=["goal"])
+    
+    
+    with Moving_sm:
+        Moving_sm.add('SetGoal', SetGoal(), transitions={"done" : 'MoveBase',
+                                                      "invalid" : "aborted"},
+                                          remapping={"goal_in"  : "goal",
+                                                     "goal_out" : "goal"})
+                                                     
+        Moving_sm.add('MoveBase', MoveBase_ac(), transitions={"succeeded"  : 'Wait',
+                                                             "aborted"   : "aborted",
+                                                             "preempted" : "aborted"},
+                                                  remapping={"goal"      :"goal"})
+        
+        Moving_sm.add('Wait',  Wait(2.0), transitions={"done"      : "next",
+                                                      "preempted" : "aborted"})
+                                                      
+    return Moving_sm
+        
 def FullTrajectorySM():
     FullTrajectory_sm = smach.StateMachine(outcomes=["aborted", "finished"])
     #the goal list
@@ -238,7 +237,40 @@ def FullTrajectorySM():
                                                      
     return FullTrajectory_sm
 
+def main():
     
+    Trajectory_sm = MovingSM()
+    
+    introspection_server = smach_ros.IntrospectionServer('SM', Trajectory_sm, '/SM_root')
+    introspection_server.start()
+    
+    Trajectory_sm.execute()
+    
+    introspection_server.stop()
+
+
+def main1():
+    
+    FullTrajectory_sm = FullTrajectorySM()
+    
+    introspection_server = smach_ros.IntrospectionServer('SM', FullTrajectory_sm, '/SM_root')
+    introspection_server.start()
+    
+    FullTrajectory_sm.execute()
+    
+    introspection_server.stop()
+    
+
+if __name__ == '__main__':
+    rospy.init_node('tutorial_node')
+    exercise = rospy.get_param('tutorial_node/exercise',0) 
+    if(exercise == 0):
+        main()
+    elif(exercise == 1):
+        main1()
+    else:
+        rospy.logerr("Exercise not listed")
+                
                                                                   
     
                                                                   
