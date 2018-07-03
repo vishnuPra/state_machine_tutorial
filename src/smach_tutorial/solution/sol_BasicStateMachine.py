@@ -9,7 +9,7 @@ class Set(smach.State):
     def __init__(self, msg = ""):
        smach.State.__init__(self, outcomes=["done"], input_keys=["Set_msg_in"],output_keys=["Set_msg_out"])
        self.msg = msg
-    
+
     def execute(self, ud):
         rospy.loginfo("Current userdata 'msg' : %s" %(ud.Set_msg_in)) #print in the rospy log at level info
         ud.Set_msg_out = self.msg
@@ -21,24 +21,24 @@ class MessageReader(smach.State):
     def __init__(self, msg = ""):
        smach.State.__init__(self, outcomes=["done"], input_keys=["msg"])
        self.msg = msg
-    
+
     def execute(self, ud):
         rospy.loginfo("Current userdata 'msg' : %s" %(ud.msg)) #print in the rospy log at level info
         rospy.sleep(2.0)
-        return "done"    
+        return "done"
 
 
 def SetPrintStateMachine():
     SetPrint_sm = smach.StateMachine(outcomes=["exit"])
     SetPrint_sm.userdata.msg = "Message in user data"
-    
+
     with SetPrint_sm:
         SetPrint_sm.add('Set', Set("Hello World"), transitions={"done": 'Print'},
                                                  remapping={"Set_msg_in":"msg",
                                                  "Set_msg_out":"msg"})
         SetPrint_sm.add('Print', MessageReader(), transitions={"done" : 'exit'},
                                          remapping={"msg":"msg"})
-    
+
     return SetPrint_sm
 ##-----------------------------------------------------------------------------------
 ##Exercice 1
@@ -49,7 +49,7 @@ class Foo(smach.State):
     def __init__(self):
        smach.State.__init__(self, outcomes=["continue", "out"])
        self.counter = 0
-    
+
     def execute(self, ud):
         self.counter = self.counter + 1
         rospy.loginfo("Current Counter : %d"%(self.counter))
@@ -58,12 +58,12 @@ class Foo(smach.State):
             return "out"
         else:
             return "continue"
-            
+
 class Bar(smach.State):
     def __init__(self):
        smach.State.__init__(self, outcomes=["continue"])
        self.counter = 0
-    
+
     def execute(self, ud):
         rospy.sleep(2)
         return "continue"
@@ -72,34 +72,83 @@ class Bar(smach.State):
 
 def FooBarStateMachine():
     FooBar_sm = smach.StateMachine(outcomes=["exit"])
-    
+
     with FooBar_sm:
         FooBar_sm.add('Foo', Foo(), transitions={"continue": 'Bar',
                                                  "out": "exit"})
         FooBar_sm.add('Bar', Bar(), transitions={"continue" : 'Foo'})
-        
+
     return FooBar_sm
 
 
-##-----------------------------------------------------------------------------------    
+##-----------------------------------------------------------------------------------
 ##Exercice 2
 ##define a state machine with the SetPrintSM nested
 
 class EmptyState(smach.State):
     def __init__(self):
         smach.State.__init__(self, outcomes=["continue"], input_keys=[], output_keys=[], io_keys=[])
-    
+
     def execute(self, ud):
         rospy.sleep(2.0)
-        return "continue" 
-   
+        return "continue"
+
 def NestedStateMachine():
     main_sm = smach.StateMachine(outcomes=["over"])
-    
+
     with main_sm:
         main_sm.add('Wait',EmptyState(),transitions={"continue":'SetPrintSM'})
         main_sm.add('SetPrintSM',SetPrintStateMachine(),transitions={"exit":"over"})
-    
+
     return main_sm
 
 
+def main():
+
+    SimpleSM = SetPrintStateMachine()
+
+    introspection_server = smach_ros.IntrospectionServer('SM', SimpleSM, '/SM_root')
+    introspection_server.start()
+    rospy.sleep(3.0)
+    outcome = SimpleSM.execute()
+    rospy.loginfo("Result : " + outcome)
+    introspection_server.stop()
+
+
+def main1():
+
+    SimpleSM = FooBarStateMachine()
+
+    introspection_server = smach_ros.IntrospectionServer('SM', SimpleSM, '/SM_root')
+    introspection_server.start()
+    rospy.sleep(3.0)
+    outcome = SimpleSM.execute()
+    rospy.loginfo("Result : " + outcome)
+    introspection_server.stop()
+
+def main2():
+
+
+    SimpleSM = NestedStateMachine()
+
+    introspection_server = smach_ros.IntrospectionServer('SM', SimpleSM, '/SM_root')
+    introspection_server.start()
+    rospy.sleep(3.0)
+    outcome = SimpleSM.execute()
+    rospy.loginfo("Result : " + outcome)
+    introspection_server.stop()
+
+##-----------------------------------------------------------------------------------
+
+if __name__ == '__main__':
+    rospy.init_node('tutorial_node')
+    exercise = rospy.get_param('tutorial_node/exercise',0)
+    if(exercise == 0):
+        main()
+    elif(exercise == 1):
+        main1()
+    elif(exercise == 2):
+        main2()
+    else:
+        rospy.logerr("Exercise not listed")
+    rospy.sleep(3.0)
