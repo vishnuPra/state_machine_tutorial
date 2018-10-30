@@ -19,9 +19,8 @@ from distutils.core import setup
 from catkin_pkg.python_setup import generate_distutils_setup
 
 d = generate_distutils_setup(
-	packages=['state_machine_tutorial',
-    'ssm_tutorial'],
-	package_dir={'': 'src'},
+    packages=['smach_tutorial'],
+    package_dir={'': 'src'},
 )
 
 setup(**d)

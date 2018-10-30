@@ -1,8 +1,9 @@
 <?xml version="1.0"?>
 <launch>
   <arg name="exercise" default="0"/>
-  <node name="tutorial_node" pkg="state_machine_tutorial" type="BasicStates.py" respawn="false" output="screen">
-  		<param name="exercise" value="$(arg exercise)"/>
-  </node>
-        
+  <node if="$(eval arg('exercise')==0)" name="tutorial_node" pkg="state_machine_tutorial" type="BasicState_0.py" respawn="false" output="screen"/>
+  <node if="$(eval arg('exercise')==1)" name="tutorial_node" pkg="state_machine_tutorial" type="BasicState_1.py" respawn="false" output="screen"/>
+  <node if="$(eval arg('exercise')==2)" name="tutorial_node" pkg="state_machine_tutorial" type="BasicState_2.py" respawn="false" output="screen"/>
+  <node if="$(eval arg('exercise')==3)" name="tutorial_node" pkg="state_machine_tutorial" type="BasicState_3.py" respawn="false" output="screen"/>
+
 </launch>

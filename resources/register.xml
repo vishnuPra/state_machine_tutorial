@@ -1,8 +1,0 @@
-<?xml version="1.0"?>
-<skills>
-        <skill name="SetGoal" 				pkg="state_machine_tutorial" 	module="ssm_tutorial.states"  class="SetGoal"	/>
-        <skill name="WaitSSM" 					pkg="state_machine_tutorial" 	module="ssm_tutorial.states"  class="Wait_ssm"	/>
-        <skill name="MoveBase_ac" 			pkg="state_machine_tutorial" 	module="ssm_tutorial.states"  class="MoveBase_ac"	/>
-        <skill name="SetInitialPose" 		pkg="state_machine_tutorial" 	module="ssm_tutorial.states"  class="SetInitialPose"	/>
-        <skill name="NextGoal" 				pkg="state_machine_tutorial" 	module="ssm_tutorial.states"  class="NextGoal"	/>
- </skills>

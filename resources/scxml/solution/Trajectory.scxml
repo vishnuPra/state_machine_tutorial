@@ -2,7 +2,7 @@
 <scxml xmlns="http://www.w3.org/2005/07/scxml" version="1.0" binding="early" xmlns:qt="http://www.qt.io/2015/02/scxml-ext" qt:editorversion="4.5.0" initial="Init_amcl">
     <qt:editorinfo initialGeometry="150.40;-32.40;-20;-20;40;40"/>
     <datamodel>
-        <data id="skill_file" expr="${state_machine_tutorial}/resources/register.xml"/>
+        <data id="skill_file" expr="${state_machine_tutorial}/resources/register_solution.xml"/>
         <data id="sleep_time" expr="1.0"/>
         <data id="goal_list" expr="[[0.592, -0.553,0.0],[1.862, 0.546,-3.14],[-1.605, 1.387,-1.57],&#10;[-1.786, -0.453,0.0]]"/>
     </datamodel>

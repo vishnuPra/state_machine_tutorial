@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scxml xmlns="http://www.w3.org/2005/07/scxml" version="1.0" binding="early" xmlns:qt="http://www.qt.io/2015/02/scxml-ext" qt:editorversion="4.5.0" initial="SetGoal">
+    <qt:editorinfo initialGeometry="63.66;-62.07;-20;-20;40;40"/>
+    <final id="Final_2">
+        <qt:editorinfo geometry="70.71;540.10;-20;-20;40;40" scenegeometry="70.71;540.10;50.71;520.10;40;40"/>
+    </final>
+    <state id="SetGoal">
+        <qt:editorinfo geometry="63.66;68.43;-60;-50;120;100" scenegeometry="63.66;68.43;3.66;18.43;120;100"/>
+        <transition type="external" event="done" target="Moving">
+            <qt:editorinfo endTargetFactors="51.17;26.68" movePoint="30.24;3.18"/>
+        </transition>
+        <transition type="external" event="invalid" target="Final_3">
+            <qt:editorinfo movePoint="12.73;-1.59"/>
+        </transition>
+        <datamodel>
+            <data id="skill" expr="SetGoal"/>
+        </datamodel>
+    </state>
+    <state id="Moving">
+        <qt:editorinfo geometry="63.66;216.44;-60;-50;120;100" scenegeometry="63.66;216.44;3.66;166.44;120;100"/>
+        <transition type="external" event="succeeded" target="Wait">
+            <qt:editorinfo movePoint="47.74;9.55"/>
+        </transition>
+        <transition type="external" event="aborted" target="Final_2">
+            <qt:editorinfo localGeometry="296.01;135.28"/>
+        </transition>
+        <datamodel>
+            <data id="skill" expr="MoveBase_ac"/>
+        </datamodel>
+    </state>
+    <state id="Wait">
+        <qt:editorinfo geometry="63.66;370.81;-60;-50;120;100" scenegeometry="63.66;370.81;3.66;320.81;120;100"/>
+        <transition type="external" event="done" target="Final_2"/>
+        <datamodel>
+            <data id="skill" expr="WaitSSM"/>
+            <data id="sleep_time" expr="2.0"/>
+        </datamodel>
+    </state>
+    <final id="Final_3">
+        <qt:editorinfo geometry="354.89;68.43;-20;-20;40;40" scenegeometry="354.89;68.43;334.89;48.43;40;40"/>
+    </final>
+    <datamodel>
+        <data id="skill_file" expr="${state_machine_tutorial}/resources/register.xml"/>
+        <data id="goal" expr="[0.592, -0.553,0.0]"/>
+    </datamodel>
+</scxml>
