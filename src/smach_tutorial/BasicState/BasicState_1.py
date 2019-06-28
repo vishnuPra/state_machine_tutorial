@@ -9,11 +9,12 @@ import smach_ros
 class WaitState(smach.State):
     def __init__(self):
         # Setup the smach.State
+        smach.State.__init__(self, outcomes=["continue"], input_keys=["sleep_time"], output_keys=[], io_keys=[])
         pass
 
     def execute(self, ud):
-        pass
-
+        rospy.sleep(ud.sleep_time)
+        return "continue"
 
 # Create the State Machine
 def WaitSM():

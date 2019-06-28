@@ -9,10 +9,12 @@ import smach_ros
 # Fill this class
 class MessageReader(smach.State):
     def __init__(self):
-        smach.State.__init__(self, outcomes=[""], input_keys=[], output_keys=[], io_keys=[])
+        smach.State.__init__(self, outcomes=["continue"], input_keys=[], output_keys=[], io_keys=["msg"])
 
     def execute(self, ud):
-        return ""
+        print("-------- Current value of message: %s"%ud.msg)
+        ud.msg = ""
+        return "continue"
 
 
 # This state write inside the userdata "msg", the message set as argument when created.
@@ -27,7 +29,7 @@ class Set(smach.State):
         self.msg = msg
 
     def execute(self, ud):
-        rospy.loginfo("Current userdata 'msg' : %s" % (ud.Set_msg_in))  # print in the log at level info
+        rospy.loginfo("-------- Current userdata 'msg' : %s" % (ud.Set_msg_in))  # print in the log at level info
         ud.Set_msg_out = self.msg
         rospy.sleep(3.0)
         return "done"

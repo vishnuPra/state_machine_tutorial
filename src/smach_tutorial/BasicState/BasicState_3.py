@@ -9,10 +9,21 @@ import smach_ros
 # Fill this class
 class MessageReader2(smach.State):
     def __init__(self):
-        smach.State.__init__(self, outcomes=[""], input_keys=[], output_keys=[], io_keys=[])
+        smach.State.__init__(self, outcomes=["continue","empty"], io_keys=["msg","reset"])
 
     def execute(self, ud):
-        return ""
+        rospy.sleep(1.0)
+        if(ud.msg <> ''):
+            rospy.loginfo(ud.msg) #print in the rospy log at level info
+            #print(ud.msg)
+            if ud.reset:
+                rospy.logwarn("Emptying message !")
+                ud.msg = ''#reset the message
+            return "continue"
+        else:
+            rospy.logerr("Message Empty !")
+            return "empty"
+
 
 
 class Set(smach.State):
